@@ -11,10 +11,13 @@ android {
         versionCode 1
         versionName "1.0"
 
+        ndk.abiFilters 'armeabi-v7a'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+//                arguments '-DANDROID_TOOLCHAIN=clang', '-DANDROID_ARM_MODE=arm', '-DANDROID_STL=c++_static'
+//                cppFlags "-std=c++11 -frtti -fexceptions"
+                abiFilters 'armeabi-v7a'
             }
         }
     }

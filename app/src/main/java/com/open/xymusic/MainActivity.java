@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("native-lib");
     }
 
+    private TextView sampleText2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +22,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+//        tv.setText(stringFromJNI());
+
+        sampleText2 = findViewById(R.id.sample_text2);
+
+        sampleText2.setText(GetFFmpegVersion());
     }
 
     /**
@@ -27,4 +34,11 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public static String GetFFmpegVersion() {
+        return native_GetFFmpegVersion();
+    }
+
+    private static native String native_GetFFmpegVersion();
+
 }
