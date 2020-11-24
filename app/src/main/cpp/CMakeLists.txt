@@ -1,44 +1,71 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
-# Sets the minimum version of CMake required to build the native library.
 
 cmake_minimum_required(VERSION 3.4.1)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+# cmakelists 设置c++11
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if (COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif (COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else ()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
+endif ()
 
+set(jnilibs ${CMAKE_SOURCE_DIR}/../jniLibs)
+
+set(libname native-lib)
+
+include_directories(
+        include
+
+)
+
+
+link_directories(
+        ${jnilibs}/${ANDROID_ABI})
+
+
+#找到包含所有的cpp文件
+file(GLOB my_source *.cpp *.c)
+
+#作用 将native-lib.cpp  生成一个native-lib 的动态库
 add_library( # Sets the name of the library.
-             native-lib
+        ${libname}
 
-             # Sets the library as a shared library.
-             SHARED
+        # Sets the library as a shared library.
+        SHARED
 
-             # Provides a relative path to your source file(s).
-             native-lib.cpp )
+        # Provides a relative path to your source file(s).
+        ${my_source})
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
+#设置ffmpeg动态库
+set(third-party-libs
 
+        avcodec
+        avdevice
+        avfilter
+        avformat
+        avutil
+        postproc
+        swresample
+        swscale
+        )
+
+#找到系统的已经存在的动态库
 find_library( # Sets the name of the path variable.
-              log-lib
+        log-lib
 
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
-              log )
-
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 
 target_link_libraries( # Specifies the target library.
-                       native-lib
+        ${libname}
 
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
+        ${third-party-libs}
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib})
