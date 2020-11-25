@@ -5,7 +5,7 @@
 #include "util/LogUtil.h"
 #include "jni.h"
 
-//由于 FFmpeg 库是 C 语言实现的，告诉编译器按照 C 的规则进行编译
+//由于 FFmpeg 库是 c 语言实现的，告诉编译器按照 c 的规则进行编译
 extern "C" {
 #include <libavcodec/version.h>
 #include <libavcodec/avcodec.h>
@@ -14,10 +14,11 @@ extern "C" {
 #include <libavfilter/version.h>
 #include <libswresample/version.h>
 #include <libswscale/version.h>
+#include <libavformat/avformat.h>
 };
 
-#ifdef __cplusplus
-#endif
+//#ifdef __cplusplus
+//#endif
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_open_xymusic_MainActivity_stringFromJNI(
@@ -47,6 +48,7 @@ Java_com_open_xymusic_MainActivity_native_1GetFFmpegVersion(JNIEnv *env, jclass 
     strcat(strBuffer, "\navcodec_license : ");
     strcat(strBuffer, avcodec_license());
     LOGD("GetFFmpegVersion\n%s", strBuffer);
+    LOGD("avformat_network_init ");
     return env->NewStringUTF(strBuffer);
 
 }

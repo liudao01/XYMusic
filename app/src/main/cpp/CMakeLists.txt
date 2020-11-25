@@ -20,7 +20,6 @@ set(libname native-lib)
 
 include_directories(
         include
-
 )
 
 
