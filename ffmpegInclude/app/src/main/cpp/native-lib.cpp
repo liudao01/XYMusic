@@ -27,6 +27,7 @@ Java_com_open_xymusic_MainActivity_stringFromJNI(
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
+
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_open_xymusic_MainActivity_native_1GetFFmpegVersion(JNIEnv *env, jclass clazz) {
